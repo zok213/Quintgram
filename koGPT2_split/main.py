@@ -1,13 +1,13 @@
-# main.py : 모델 학습 및 models 폴더에 저장
+# main.py: Train the Model and Save it in the models Folder
 
-## 라이브러리 추가하기
+## Add Libraries
 import argparse
 
 from train import *
 
 
 if __name__ == "__main__":
-    ## Parser 생성하기
+    ## Create Parser
     parser = argparse.ArgumentParser(description="KoGPT2",
                                     formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     dir_path = 'C:/Users/USER/final-project-level3-nlp-06-main/KoGPT2/datasets'

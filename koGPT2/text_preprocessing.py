@@ -27,13 +27,13 @@ def clean_text(lines):
     lines = re.sub('\(계속\).*?[●○]', '', lines)
     lines = re.sub('[●○]', '', lines)
 
-    lines = re.sub(r"\s+"," ",lines).strip() # 여러 개의 공백을 하나의 공백으로 대체
+    lines = re.sub(r"\s+"," ",lines).strip() # Replace Multiple Spaces with a Single Space
     lines = re.sub(r"[~♥]", "", lines) 
 
     lines = re.sub(r"ㅋ|ㅎ|ㅠ|ㅜ","",lines) 
     lines = re.sub(r'\n','',lines).strip()
 
-    lines = re.sub(r"\(.*\)|\s-\s.*","",lines) # 괄호로 둘러싸인 문자열 또는 공백-공백-문자열 형태를 삭제
+    lines = re.sub(r"\(.*\)|\s-\s.*","",lines) # Delete Strings Enclosed in Parentheses or Strings in the Form of Space-Space-String
     lines = re.sub(r"(http|https)?:\/\/\S+\b|www\.(\w+\.)+\S*","",lines).strip()
 
     return lines

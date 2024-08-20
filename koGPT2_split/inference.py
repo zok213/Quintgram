@@ -14,9 +14,9 @@ def generate_text(sequence, max_length, top_k=50, top_p=0.95, temperature=0.85):
         bos_token_id=model.config.bos_token_id,
         eos_token_id=model.config.eos_token_id,
         pad_token_id=model.config.pad_token_id,
-        top_k=top_k, # Top-K 샘플링
-        top_p=top_p, # Top-P 샘플링
-        temperature=temperature, # 높을수록 다양한 결과를 내도록 함
+        top_k=top_k, # Top-K Sampling
+        top_p=top_p, # Top-P Sampling
+        temperature=temperature, # The higher the value, the more diverse the results.
     )
     result = tokenizer.decode(outputs[0], skip_special_tokens=True)
     ppl = perplexity(model=model, generated_sentence=outputs[0], stride=32)
@@ -33,7 +33,7 @@ def main():
     p = 0.95
     temperature = 0.85
     
-    # 5번 반복 -> 5개 결과 추출
+    # Repeat 5 times -> Extract 5 results
     header = '=' * 15 + f'k: {k}, p:{p}, len:{max_len}, temp:{temperature}' + '=' * 15
     print(header)
         
@@ -41,8 +41,8 @@ def main():
     outputs.append(header + '\n' + output + '\n')
     print(output)
 
-    # Append 모드로 저장합니다. 결과 확인용!
-    # 경로 설정 다시 # ./RESULT/result_{input_text}.txt'
+    # Save in append mode for result verification!
+    # Reconfigure the path # ./RESULT/result_{input_text}.txt
     
     with open(f'C:/Users/USER/final-project-level3-nlp-06-main/KoGPT2/RESULT/result_{input_text}_2.txt', 'a') as f:
         for output in outputs:

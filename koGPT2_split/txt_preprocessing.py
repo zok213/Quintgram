@@ -21,15 +21,15 @@ def preprocessing(dir,filename):
             file = open(os.path.join(dir,file),'r', encoding='cp949')
             lines = file.readlines()
 
-            # 전처리
+            # preprocessing
             for line in lines:
-                line = re.sub(r'\n','',line).strip() # 줄바꿈 제거, 양족 공백 제거
-                # 문자열이 비어있지 않을 경우에만 코드 실행
+                line = re.sub(r'\n','',line).strip() # Remove line breaks, remove bipedal spaces
+                # Execute code only if the string is not empty
                 if line: 
-                    line = re.sub(r"\s+"," ",line).strip() # 공백 문자(\s)가 1개 이상 반복되는 패턴을 찾아 1개의 공백 문자로 대체
+                    line = re.sub(r"\s+"," ",line).strip() # Find a pattern where one or more of the space characters (\\s) are repeated, and replace them with 1 space character
                     line = re.sub(r"ㅋ|ㅎ|ㅠ|ㅜ","",line) # 한글 이모티콘인 'ㅋ', 'ㅎ', 'ㅠ', 'ㅜ'를 제거
                     line = re.sub(r"\(.*\)|\s-\s.*","",line) # 괄호(()) 안의 내용과, 공백-공백(-) 사이의 내용을 제거
-                    line = re.sub(r"(http|https)?:\/\/\S+\b|www\.(\w+\.)+\S*","",line).strip() # URL 주소를 제거
+                    line = re.sub(r"(http|https)?:\/\/\S+\b|www\.(\w+\.)+\S*","",line).strip() # URL 주소를 제거    
                     # line = re.sub(r"\..",".",line).strip()
                     # line = re.sub(r"\??","?",line)
                     # line = re.sub(r"\!!","!",line)

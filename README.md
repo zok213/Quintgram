@@ -46,7 +46,7 @@ Due to file size limitations, the original video has been uploaded to YouTube, w
 <br>
 </br>
 
-### 3. 동화 생성
+### 3. Fairy Tale Generation
 <img src="https://user-images.githubusercontent.com/119478998/228751099-122cf77c-48fa-4e5d-be71-7bcd4ecd1bf4.gif" width="800" height="400" />
 
 <br>
@@ -155,10 +155,6 @@ serve -s build
 
 ## 📂 Dataset
 - [quickdraw-dataset](https://github.com/googlecreativelab/quickdraw-dataset)
-- [어린이 전래동화 (청와대)](http://18children.president.pa.go.kr/our_space/fairy_tales.php)
-- [그림형제 동화 번역 데이터](https://m.blog.naver.com/osy2201/221179543994)
-- [이솝우화 동화 번역 데이터](https://m.blog.naver.com/osy2201/221183426988)
-- [tale1.txt](https://github.com/cosine0/kogpt2_tale/blob/main/data/tale.txt)
 <br>
 </br>
 

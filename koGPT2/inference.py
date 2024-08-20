@@ -38,9 +38,9 @@ class DropOutput(nn.Module):
 # inference
 def main():
     learn = load_learner(Path('C:/Users/USER/koGPT2_Sum_Ver/models/koGPT2_model_0322.pkl'))
-    learn.model.cuda() # 모델을 GPU로 이동
+    learn.model.cuda() # Move Model to GPU
     
-    prompt = "옛날 옛적에 나무" # 동화 첫 부분. CNN keyword 포함.
+    prompt = "옛날 옛적에 나무" # The first part of the fairy tale. Contains CNN keyword.
     prompt_ids = tokenizer.encode(prompt)
     inp = tensor(prompt_ids)[None].cuda()
 

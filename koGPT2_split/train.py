@@ -47,7 +47,7 @@ def train(args):
     training_args = TrainingArguments(
         output_dir=output_dir,
         overwrite_output_dir=overwrite_output_dir,
-        per_device_train_batch_size=per_device_train_batch_size, # 4 -> 2 해도 cuda out of memory 뜸
+        per_device_train_batch_size=per_device_train_batch_size, # 4 -> 2 cuda hết bộ nhớ
         per_device_eval_batch_size=1,
         num_train_epochs=num_train_epochs,
         save_total_limit=2,

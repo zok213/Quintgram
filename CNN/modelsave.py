@@ -7,7 +7,7 @@ import torch
 from src.dataset import MyDataset
 from src.model import QuickDraw
 
-#체크포인트 파일로 모델을 만드는 코드
+#Code to Create a Model from a Checkpoint File
 
 def get_args():
     parser = argparse.ArgumentParser(

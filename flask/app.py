@@ -12,7 +12,7 @@ from src.config import *
 from src.dataset import CLASSES
 import torch
 import base64
-# from PIL import Image // 이미지 저장 
+# from PIL import Image // Save image 
 import urllib.request
 
 import os
@@ -31,9 +31,9 @@ class_dict = {'apple': '사과', 'book': '책', 'bowtie': '보타이', 'candle':
 'ice cream': '아이스크림', 'leaf': '나뭇잎', 'scissors': '가위', 'star': '별', 't-shirt': '티셔츠',
 'pants': '바지', 'lightning': '번개', 'tree': '나무'}
 
-keyword_key = [] # 달리와 스토리에 들어갈 전역변수
-story_key = [] # 스토리 담는 전역변수
-story_key_en = [] # 스토리를 영어로 만들어서 달리에 넣어주는 전역변수 
+keyword_key = [] # Global variable to enter Dali and story
+story_key = [] # Global variables that tell a story
+story_key_en = [] # A global variable that makes the story in English and puts it in Dali 
 
 def get_session_id():
     if 'user_id' in session:
@@ -65,10 +65,10 @@ class DropOutput(nn.Module):
 def post_data():
     if 'user_id' not in session:
         user_id = get_session_id()
-        # HTTP POST 요청 데이터를 추출합니다.
+        # Extract HTTP POST request data.
         data = request.get_json()
         image_data = data.get('image', '')
-        # base64 문자열로부터 이미지 데이터를 복원합니다.
+        # Restore image data from base64 string.
         image_64 = base64.b64decode(image_data.split(',')[1])
         image_array = np.frombuffer(image_64, np.uint8)
         # with open('./image/canvas_image.png', 'wb') as f:
@@ -78,18 +78,18 @@ def post_data():
         _, _, _, alpha = cv2.split(image)
         image_gray = alpha
 
-        # 여기서 부터 모델 코드 ------------------------------------------------------
-        # 이미지를 28*28 크기로 조정합니다.
+        # Model Code ------------------------------------------------------ from here
+        # Resize the image to 28*28 size.
         img_resized = cv2.resize(image_gray, (28, 28))
         
-        # 이미지를 numpy 배열로 변환합니다.
+        # Convert the image to a numpy array.
         img_array = np.array(img_resized, dtype=np.float32)
 
-        # 이미지를 4차원 입력으로 만듭니다.
+        # Make the image a four-dimensional input.
         img_tensor = np.expand_dims(img_array, axis=0)
         img_tensor = np.expand_dims(img_tensor, axis=0)
 
-        # 이미지를 pytorch tensor로 변환합니다.
+        # Convert the image to a pytorch tensor.
         img_tensor = torch.from_numpy(img_tensor)
 
         model = torch.load("/root/draw_flask/src/whole_model_quickdraw.txt", map_location=torch.device('cpu'))
@@ -99,19 +99,19 @@ def post_data():
             logits = model(img_tensor)
             pred = torch.argmax(logits, dim=1).item()
             pred_class = CLASSES[pred]
-            pred_class_kr = class_dict.get(pred_class, '알 수 없는 객체')  # 클래스 이름을 한글로 변환합니다.
+            pred_class_kr = class_dict.get(pred_class, '알 수 없는 객체')  # Convert the class name to Korean.
             keyword_key.clear()
             keyword_key.append(pred_class_kr)
 
-        # 예측 결과를 로그에 기록합니다.
+        # Log the prediction results.
         app.logger.info(f'user_id: {user_id}, pred_class: {pred_class}, pred_class_kr: {pred_class_kr}')
 
-        # 예측 결과를 클라이언트에게 반환합니다.
+        # Returns the prediction results to the client.
         return {"prediction": pred_class_kr}  
 
 
 learn = load_learner('/root/draw_flask/src/koGPT2_model_0322.pkl')
-learn.model.cuda() # 모델을 GPU로 이동
+learn.model.cuda() # Moving the Model to the GPU
 
 @app.route('/get_story', methods=['GET','POST'])
 def get_story():
@@ -137,7 +137,7 @@ def get_story():
 
             generated_text = tokenizer.decode(preds[0].cpu().numpy())
 
-        # 문장의 마지막 문자가 마침표, 느낌표, 물음표 중 하나이면, 이를 두 번째 프롬프트(prompt2)로 정의
+        #  If the last character of a sentence is either a period, an exclamation mark, or a question mark, define it as the second prompt (prompt2)
             if generated_text[-1] in [".", "!", "?"]:
                 prompt2 = generated_text
                 break
@@ -161,7 +161,7 @@ def get_story():
 
             generated_text2 = tokenizer.decode(preds[0].cpu().numpy())
 
-        # 문장의 마지막 문자가 마침표, 느낌표, 물음표 중 하나이면, 이를 두 번째 프롬프트(prompt3)로 정의
+        # If the last character of a sentence is a period, exclamation point, or question mark, define it as the second prompt (prompt3)
             if generated_text2[-1] in [".", "!", "?"]:
                 prompt3 = generated_text2 
                 break
@@ -171,7 +171,7 @@ def get_story():
         prompt_ids3 = tokenizer.encode(prompt3)
         inp3 = tensor(prompt_ids3)[None].cuda()
 
-# 최종적으로 텍스트를 생성
+# Finally generate the text
         for i in range(max_iterations):
             preds = learn.model.generate(inp3,
                                         max_length=70,
@@ -184,7 +184,7 @@ def get_story():
 
             generated_text3 = tokenizer.decode(preds[0].cpu().numpy())
 
-        # 문장의 마지막 문자가 다., 요., 죠 중 하나일 때 종료
+        # It ends when the last character of the sentence is one of the da., yo., and joe
         # if generated_text3[-1] in [".", "!", "?"]:
             if generated_text3[-1] in ["다.", "요.", "죠."]:
                 generated_text3 = generated_text3
@@ -194,7 +194,7 @@ def get_story():
         generated_text3 = generated_text3.replace(".", ". \n").replace("!", "! \n").replace("?","? \n").replace("다.","다. \n").replace("요.","요. \n").replace("죠.","죠. \n")
 
         # .replace("! ", "!\n").replace("? ", "?\n")
-        #gpt에서 나온 스토리를 n번째 문장까지만 스토리 보이스에 넣을 코드
+        #Code to put stories from GPT into the story voice up to the nth sentence
         sentences = generated_text3.split(". \n")
         story_key.clear()
         for i in range(10):
@@ -202,17 +202,17 @@ def get_story():
                 sentence = sentences[i].strip() + "."
                 story_key.append(sentence)
 
-        if story_key:  # 스토리 키 리스트가 비어있지 않은 경우에만 출력
+        if story_key:  # Prints only if the story key list is not empty
             print(f"스토리 키 : {story_key}")
         else:
             print("세 번째 마침표 이전의 문장을 찾을 수 없습니다.")
 
         
 
-        # 달리에 넣을 스토리 데이터 번역 파파고 api
+        # Translate story data to Dali Papago API
         client_id = ""
         client_secret = ""
-        encText = urllib.parse.quote(story_key[0])# 스토리에 담겨져있는 첫번째 문장을 번역 해서 달리에 넣음 첫번째만 넣어도 이미지와 스토리가 비슷하니까
+        encText = urllib.parse.quote(story_key[0])# Translate the first sentence in the story and put it in Dali Even if you put the first sentence in it, the image and the story are similar.
         data = "source=ko&target=en&text=" + encText
         url = "https://naveropenapi.apigw.ntruss.com/nmt/v1/translation"
         request = urllib.request.Request(url)
@@ -227,16 +227,16 @@ def get_story():
             print("Error Code:" + rescode)
         data = response_body
 
-        # 받아온 데이터 중에 translatedText 부분만 받아오는 코드
+        # Code that receives only the translatedText portion of the received data
         parsed_data = json.loads(data)
         translated_text = parsed_data['message']['result']['translatedText'].replace('\n', ' ')
         print(f"translatedText 부분:{translated_text}")
 
         story_key_en.clear()
-        story_key_en.append(translated_text) #달리에 넣을 스토리 번역 
+        story_key_en.append(translated_text) #Translate the story for Dali 
         
         app.logger.info(f'user_id: {user_id}, story_key: {story_key}, story_key_en: {story_key_en}')
-        # 리턴은 한글로 해서 보내주기
+        # Send the return in Korean
         return story_key[:-1]
 
 
@@ -245,9 +245,9 @@ def get_story():
 @app.route('/get_data', methods=['GET','POST'])
 def get_data():
     if 'user_id' not in session:
-        user_id = get_session_id() # 사용자 IP 주소를 세션 id로 활용합니다.
+        user_id = get_session_id() # Utilize the user's IP address as the session ID.
 
-        # dall-e api 가져오는 코드
+        # Code to get the DALL-E API
         openai.api_key = ""
         openai.Model.list()
         response = openai.Image.create(
@@ -260,13 +260,13 @@ def get_data():
             url = response.data[0].url
             image_data = requests.get(url).content
 
-            # 이미지 데이터를 BytesIO 객체로 변환합니다.
+            # Convert image data to BytesIO objects.
             image_io = io.BytesIO(image_data)
             
-            # 이미지를 저장할 파일 경로와 파일 이름을 지정합니다.
+            # Specify the file path and file name where you want to save the image.
             save_path = './image/new_image.png'
             
-            # 이미지를 파일로 저장합니다.
+            # Save the image as a file.
             with open(save_path, 'wb') as f:
                 f.write(image_data)
                 
@@ -277,10 +277,10 @@ def get_data():
 @app.route('/get_voice', methods=['GET','POST'])
 def get_voice():
     if 'user_id' not in session:
-        user_id = get_session_id()# 사용자 IP 주소를 세션 id로 활용합니다.
+        user_id = get_session_id()# Utilize the user's IP address as the session ID.
         client_id = ""
         client_secret = ""
-        story_text = ''.join(story_key[:-1])# 스토리키에 있는 모든 문자열 데이터를 하나로 합치기
+        story_text = ''.join(story_key[:-1])# Combine all string data in a story key into one
         encText = urllib.parse.quote(story_text,encoding="UTF-8") #story_kr
         data = f"speaker=ngoeun&volume=0&speed=0&pitch=0&format=mp3&text=" + encText
         url = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts"
