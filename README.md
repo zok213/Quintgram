@@ -1,23 +1,17 @@
-# :baby: Generate truyện cổ tích cho trẻ em, My AI Fairy-Tale 📖
+# :baby: Generate fairy tales for children, Quintgram 📖
 <br>
 </br>
 
-<p align="center"><img src ="https://user-images.githubusercontent.com/119478998/228507228-d11276a3-f62d-4806-96d7-99826c7f3037.png"></p>
 
 <div align="center">
-Hello! This is My AI Fairy-Tale, a fairy tale creation service for children. <br> 
+Hello! This is Quintgram educational comic generator, a fairy tale creation service for children. <br> 
 Draw a picture and Quintgram will make a fairy tale for you. Let's have fun making fairy tales with MIT!
 </div>
 
 
-## :information_desk_person: 서비스 소개
-Trẻ em ngày nay tiêu thụ phương tiện truyền thông một cách thụ động, chỉ đơn giản là xem video trên điện thoại thông minh và máy tính bảng của chúng. Ngay cả trẻ 3 và 4 tuổi cũng tiêu thụ trung bình hơn 4 giờ 8 phút truyền thông, vượt xa thời gian khuyến nghị của WHO để tiêu thụ. Chúng tôi phát triển dịch vụ vì chúng tôi cảm thấy cần một dịch vụ mà trẻ em có thể tích cực tham gia, thay vì phương tiện truyền thông mà trẻ em tiêu thụ thụ động. 
-My AI Fairy-Tale là một dịch vụ web sáng tạo có sự tham gia tạo ra những hình ảnh cổ tích và truyện cổ tích dựa trên những bức vẽ của trẻ em và đọc to chúng. Bằng cách tạo ra những câu chuyện cổ tích và hình vẽ mới làm say đắm trái tim trẻ em, nó được kỳ vọng sẽ đóng góp rất lớn vào sự phát triển cảm xúc của trẻ em.
-
-
-🏠 [My AI Fairy-Tale Access Link]
-
-🔎 프로젝트의 자세한 내용을 알고싶다면? [포트폴리오](https://github.com/Minju-nimm/MIT_PJT/blob/main/src/mit_presentaion.pdf)와 [보고서](https://github.com/Minju-nimm/MIT_PJT/blob/main/src/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8_%EB%9E%A9%EC%97%85_%EB%A6%AC%ED%8F%AC%ED%8A%B8.pdf)를 참고하세요!
+## :information_desk_person: Service Introduction
+Today's children consume media passively, simply watching videos on their smartphones and tablets. Even 3- and 4-year-olds consume an average of more than 4 hours and 8 minutes of media, far exceeding the WHO's recommended time to consume. We developed the service because we felt the need for a service that children could actively participate in, rather than media that children passively consume. 
+Quintgram educational comic generator is an innovative web service that engages in creating fairy tale images and fairy tales based on children's drawings and reading them aloud. By creating fairy tales and new drawings that captivate children's hearts, it is expected to make a huge contribution to children's emotional development.
 
 <br>
 </br>
@@ -51,28 +45,6 @@ Due to file size limitations, the original video has been uploaded to YouTube, w
 
 <br>
 </br>
-
-## :computer: Installation
-Each process has different requirements, so please refer to the README.md file for each process!
-
-```bash
-pip install -r requirements.txt
-```
-<br>
-</br>
-
-<div align="center">
-
-![Pytorch](https://img.shields.io/badge/Pytorch-v1.13.1-orange?logo=Pytorch&style=plastic)
-![NodeJS](https://img.shields.io/badge/Node.js-v18.14.2-339933?logo=node.js&style=plastic)
-![react](https://img.shields.io/badge/react-v18.2.0-61dafb?logo=React&style=plastic)
-![javascript](https://img.shields.io/badge/javascript-ES6-yellow?logo=javascript&style=plastic)
-
-![Deepspeed](https://img.shields.io/badge/Deepspeed-v0.8.2+4ae3a3da-blue?logo=Deepspeed&style=plastic)
-![Transformer](https://img.shields.io/badge/Transformer-v4.27.2-green?logo=Transformer&style=plastic)
-![fastai](https://img.shields.io/badge/fastai-v2.7.11-orange?logo=fastai&style=plastic)
-
-</div>
 
 <br>
 </br>
@@ -117,52 +89,3 @@ MIT_PJT
 └── README.md
 ```
 
-<br>
-</br>
-
-## 🖱️ Usage
-### CNN
-```python
-# Command to train with DeepSpeed
-# Parameters like batch size and max_epoch can be adjusted in the deepspeedconfig.json file
-deepspeed train.py --deepspeed_config deepspeedconfig.json 
-
-# Command to train with regular torch
-# After removing DeepSpeed code and setting parameters in get_args, use the following command
-python train.py 
-```
-
-### koGPT2
-```python
-# Command to train the model
-python koGPT2/main.py
-
-# Command to generate fairy tales, requires the trained model
-python koGPT2/inference.py
-```
-
-### Web Deployment and Execution
-```node.js
-# Command for bundling, optimizing, and obfuscating source code
-npm run build
-
-# Command to execute deployment
-serve -s build
-```
-
-<br>
-</br>
-
-## 📂 Dataset
-- [quickdraw-dataset](https://github.com/googlecreativelab/quickdraw-dataset)
-<br>
-</br>
-
-## 📚 Reference
-- https://www.yna.co.kr/view/AKR20210113064500005
-- https://github.com/uvipen/QuickDraw
-- https://github.com/microsoft/DeepSpeed
-- https://github.com/boostcampaitech3/final-project-level3-nlp-06
-- https://github.com/ttop32/KoGPT2novel
-- https://openai.com/blog/dall-e/
-- [React Redux](https://react-redux.js.org/)
