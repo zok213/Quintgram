@@ -1,7 +1,4 @@
 # :baby: Generate fairy tales for children, Quintgram 📖
-<br>
-</br>
-
 
 <div align="center">
 Hello! This is Quintgram educational comic generator, a fairy tale creation service for children. <br> 
