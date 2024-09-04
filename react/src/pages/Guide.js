@@ -23,7 +23,7 @@ const mainGoToDraw = () => {
 
   return (
     <div className="guide_container">
-      <button className='sketch_page_button' onClick={goToDraw}>바로 그림 그리러 가기 <FontAwesomeIcon icon={faPlay} /></button>
+      <button className='sketch_page_button' onClick={goToDraw}>Go straight to drawing <FontAwesomeIcon icon={faPlay} /></button>
       <div className="guide_img">
         <img src={guideImg} alt="guide"/>
       </div>

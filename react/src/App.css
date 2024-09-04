@@ -357,9 +357,9 @@ button.voice div:hover {
 
 .main_sketch_page_button {
   position: absolute;
-  bottom: 5vh;
-  right: 5vw;
-  transform: rotate(5deg);
+  bottom: 0vh;
+  right: 7vw;
+  transform: rotate(-5deg);
   width: 15vw;
 }
 
