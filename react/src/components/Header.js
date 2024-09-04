@@ -22,10 +22,10 @@ const Header = () => {
 
   return (
     <div className='header_container'>
-            <h1><img className='logo' src={logo} alt='로고 이미지'/></h1>
+            <h1><img className='logo' src={logo} alt='Logo image'/></h1>
             <ul>
-                <li><button onClick={goToDraw}><img className='draw_button' src={drawButton} alt='스케치북 이동 버튼'/></button></li>
-                <li><button onClick={goToGuide}><img className='guide_button' src={guideButton} alt='가이드 이동 버튼'/></button></li>
+                <li><button onClick={goToDraw}><img className='draw_button' src={drawButton} alt='Sketchbook move button'/></button></li>
+                <li><button onClick={goToGuide}><img className='guide_button' src={guideButton} alt='Guide movement button'/></button></li>
             </ul>
     </div>
   )
