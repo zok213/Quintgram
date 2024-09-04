@@ -6,7 +6,7 @@ export default () => {
   return (
     <Background>
       <div width="5%"><img src={Spinner} alt="로딩중" /></div>
-      <LoadingText>잠시만 기다려 주세요.</LoadingText>
+      <LoadingText>Waiting...</LoadingText>
     </Background>
   );
 };
