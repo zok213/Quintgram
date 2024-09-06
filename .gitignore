@@ -1,2 +1,7 @@
 /react/package-lock.json
 /react/node_modules/
+/models/
+/koGPT2/__pycache__/
+/koGPT2_split/__pycache__/
+/koGPT2/*.txt
+/CNN/src/__pycache__

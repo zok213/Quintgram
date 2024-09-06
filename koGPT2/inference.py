@@ -37,7 +37,7 @@ class DropOutput(nn.Module):
 
 # inference
 def main():
-    learn = load_learner(Path('C:/Users/USER/koGPT2_Sum_Ver/models/koGPT2_model_0322.pkl'))
+    learn = load_learner(Path('D:\Gitrepo\MIT_PJT-main\models\koGPT2_model_0322_4.pkl'))
     learn.model.cuda() # Move Model to GPU
     
     prompt = "옛날 옛적에 나무" # The first part of the fairy tale. Contains CNN keyword.
@@ -59,5 +59,5 @@ def main():
 
     
 if __name__ == "__main__":
-    main()
+    print(main())
     

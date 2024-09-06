@@ -5,7 +5,9 @@ import openai
 import requests
 import io
 import random
-
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'CNN')))
 import cv2
 import numpy as np
 from src.config import *
@@ -110,7 +112,7 @@ def post_data():
         return {"prediction": pred_class_kr}  
 
 
-learn = load_learner('/root/draw_flask/src/koGPT2_model_0322.pkl')
+learn = load_learner('D:\Gitrepo\MIT_PJT-main\models\koGPT2_model_0322.pkl')
 learn.model.cuda() # Moving the Model to the GPU
 
 @app.route('/get_story', methods=['GET','POST'])
