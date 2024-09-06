@@ -28,7 +28,7 @@ BLUE_RGB = (255, 0, 0)
 YELLOW_RGB = (0, 255, 255)
 WHITE_RGB = (255, 255, 255)
 
-# 이 아래로 클래스 목록, 조절 가능
+# Below this class list, adjustable
 CLASSES = ['airplane', 'alarm clock', 'ambulance', 'angel', 'ant', 'apple', 'axe',
         'backpack', 'banana', 'bandage', 'baseball', 'baseball bat', 'basket', 'basketball', 'bat', 
         'beach', 'bear', 'bed', 'bee', 'bicycle', 'bird', 'book', 'boomerang', 'bowtie', 'bracelet', 

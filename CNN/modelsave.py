@@ -26,7 +26,7 @@ def get_args():
     parser.add_argument("--saved_path", type=str, default="/your/path/trained_models")
     parser.add_argument('--local_rank', type=int, default=-1,
                     help='local rank passed from distributed launcher')
-    #deepspeed /root/finalproject/QuickDraw-master/train.py --deepspeed_config /root/finalproject/deepspeedconfig.json으로 실행
+    #Run deepspeed /root/finalproject/QuickDraw-master/train.py --deepspeed_config /root/finalproject/deepspeedconfig.json
     args = parser.parse_args()
     return args
 

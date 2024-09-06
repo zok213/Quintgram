@@ -8,6 +8,8 @@ import random
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'CNN')))
+sys.path.append(os.path.join(os.path.dirname(__file__), '../KoGPT2'))
+from koGPT2_trainer import *
 import cv2
 import numpy as np
 from src.config import *
@@ -94,7 +96,7 @@ def post_data():
         # Convert the image to a pytorch tensor.
         img_tensor = torch.from_numpy(img_tensor)
 
-        model = torch.load("/root/draw_flask/src/whole_model_quickdraw.txt", map_location=torch.device('cpu'))
+        model = torch.load("D:\Gitrepo\MIT_PJT-main\CNN_trained\whole_model_quickdraw.txt", map_location=torch.device('cpu'))
         model.eval()
 
         with torch.no_grad():
@@ -112,7 +114,7 @@ def post_data():
         return {"prediction": pred_class_kr}  
 
 
-learn = load_learner('D:\Gitrepo\MIT_PJT-main\models\koGPT2_model_0322.pkl')
+learn = load_learner('models\koGPT2_model_0322_4.pkl')
 learn.model.cuda() # Moving the Model to the GPU
 
 @app.route('/get_story', methods=['GET','POST'])

@@ -40,7 +40,7 @@ def get_args():
     parser.add_argument("--saved_path", type=str, default="/your/path/trained_models")
     parser.add_argument('--local_rank', type=int, default=-1,
                     help='local rank passed from distributed launcher')
-    #deepspeed /root/finalproject/QuickDraw-master/train.py --deepspeed_config /root/finalproject/deepspeedconfig.json으로 실행
+    #deepspeed /root/finalproject/QuickDraw-master/train.py --deepspeed_config /root/finalproject/deepspeedconfig.json to run
     parser = deepspeed.add_config_arguments(parser)
     args = parser.parse_args()
     return args
@@ -90,7 +90,7 @@ def train(opt):
     optimizer = FusedAdam(model.parameters(), lr=1e-3)
     scheduler = lr_scheduler.CosineAnnealingLR(optimizer, T_max=100)
     model, optimizer, _, _ = deepspeed.initialize(model=model, config_params=opt.deepspeed_config, optimizer=optimizer)
-    #모델 gpu로 옮기기
+    # Move the model to GPU
     model.to(device)
     #optimizer = Adam(model.parameters(), lr=1e-3)
     model.cuda()
@@ -106,15 +106,15 @@ def train(opt):
         model_parameters = list(map(lambda x: x.cuda(), model_parameters))
 
     criterion = nn.CrossEntropyLoss()
-    #손실 함수 정의
+    # Define loss function
     
-# 모델 학습 수행 전 초기화 작업 수행! (나중에 모델로 저장해두려고 변수에 저장해두는거임)
+# Perform initialization tasks before model training (save in variable for later model saving)
     epoch = 0
-    best_loss = 1e5 #현재까지 관찰된 최적의 손실값
-    best_epoch = 0 #현재까지 관찰된 최적의 epoch값
+    best_loss = 1e5 # Best loss observed so far
+    best_epoch = 0 # Best epoch observed so far
     save_freq = 5
-    model.train() #모델을 학습 모드로 설정
-    num_iter_per_epoch = len(training_generator) #학습 데이터로부터 생성된 배치의 총갯수
+    model.train() # Set the model to training mode
+    num_iter_per_epoch = len(training_generator) # Total number of batches generated from the training data
     
     checkpoints = [f for f in os.listdir() if f.startswith('checkpoint')]
     if checkpoints:
@@ -130,11 +130,11 @@ def train(opt):
         start_iter = 0
         print("=> no checkpoint found")
 
-    #모델 train
+    # Train the model
     for epoch in range(start_epoch, max_epochs):
         for iter, batch in enumerate(training_generator, start=start_iter):
             images, labels = batch
-            #데이터 gpu로 옮기기
+            # Move data to GPU
             images = images.to(device)
             labels = labels.to(device)
             optimizer.zero_grad()
@@ -144,9 +144,9 @@ def train(opt):
             loss.backward()
             optimizer.step()
             scheduler.step()
-            predictions = predictions.to(device) # predictions Tensor를 GPU 메모리로 이동
+            predictions = predictions.to(device) # Move predictions Tensor to GPU memory
             
-            #get_evaluation: label과 예측값을 입력받아 정확도를 계산하는 함수
+            # get_evaluation: Function to calculate accuracy by receiving labels and predictions
             training_metrics = get_evaluation(labels.cpu().numpy(), predictions.cpu().detach().numpy(),list_metrics=["accuracy"]) 
             print(model.device)
             print("Epoch: {}, Iteration: {}/{}, Lr: {}, Loss: {}, Accuracy: {}".format(
@@ -157,11 +157,11 @@ def train(opt):
                     loss, training_metrics["accuracy"]))
             writer.add_scalar("Train/Loss", loss.item(), epoch * num_iter_per_epoch + iter)
             writer.add_scalar('Train/Accuracy', training_metrics["accuracy"], epoch * num_iter_per_epoch + iter)
-            #모델을 학습하는 과정에서 매 epoch마다 손실과 정확도를 계산하고 Tensorboard에 기록
+            # During the training process, calculate and record loss and accuracy in Tensorboard for each epoch
             
-            #모델 가중치 저장해놓기
+            # Save model weights
             if (iter) % save_freq == 0: 
-            # 진행중인 iteration이랑 정해둔 저장빈도가 나누어떨어질 때 ex)10번째, 20번째...
+            # When the ongoing iteration is divisible by the defined save frequency (e.g., 10th, 20th...)
                 state = {
                     'epoch': epoch,
                     'iteration': iter,
@@ -174,28 +174,28 @@ def train(opt):
 
 
     
-    model.eval() #모델을 평가 모드로 설정
+    model.eval() # Set the model to evaluation mode
     loss_ls = []
     te_targets_ls = []
     te_pred_ls = []
 
-    #테스트 데이터를 배치 단위로 가져와서 테스트 수행
+    # Retrieve test data in batches and perform testing
     for idx, te_batch in enumerate(test_generator):
         te_images, te_labels = te_batch
         num_samples = te_labels.size()[0]
         if torch.cuda.is_available():
-            #데이터 gpu로 옮기기
+            # Move data to GPU
             te_images = te_images.to(device)
             te_labels = te_labels.to(device)
         te_predictions = model(te_images)
-        te_loss = criterion(te_predictions, te_labels) #손실 계산
+        te_loss = criterion(te_predictions, te_labels) # Calculate loss
         loss_ls.append(te_loss * num_samples)
         te_targets_ls.extend(te_labels.clone().cpu())
         te_pred_ls.append(te_predictions.clone().cpu())
         te_loss = sum(loss_ls) / test_set.__len__()
         te_pred = torch.cat(te_pred_ls, 0)
         te_label = np.array(te_targets_ls)
-        test_metrics = get_evaluation(te_label, te_pred.numpy(), list_metrics=["accuracy", "confusion_matrix"]) #모델의 성능 평가 지표 계산
+        test_metrics = get_evaluation(te_label, te_pred.numpy(), list_metrics=["accuracy", "confusion_matrix"]) # Calculate model evaluation metrics
         output_file.write(
             "Epoch: {} \nTest loss: {} Test accuracy: {} \nTest confusion matrix: \n{}\n\n".format(
                 epoch + 1,
@@ -205,23 +205,5 @@ def train(opt):
         print("Epoch: {}, Lr: {}, Loss: {}, Accuracy: {}".format(
             epoch + 1,
             optimizer.param_groups[0]['lr'],
-            te_loss, test_metrics["accuracy"]))
-        writer.add_scalar('Test/Loss', te_loss, epoch)
-        writer.add_scalar('Test/Accuracy', test_metrics["accuracy"], epoch)
-        model.train()
-        if te_loss + opt.es_min_delta < best_loss:
-            best_loss = te_loss
-            best_epoch = epoch
-            #제일 최적인 모델 저장
-            torch.save(model, opt.saved_path + os.sep + "whole_model_MIT")
-            #더 안 나아질 때 학습 중단
-        if epoch - best_epoch > opt.es_patience > 0:
-            print("에포크 {}에서 train 종료. 가장 낮은 loss:{}".format(epoch, te_loss))
-            break
-    writer.close()
-    output_file.close()
-
-
-if __name__ == "__main__":
-    opt = get_args()
-    train(opt)
+            te_loss,
+            test_metrics["accuracy"]))
