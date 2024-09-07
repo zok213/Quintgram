@@ -14,7 +14,7 @@ import Fairytail from './pages/Fairytail';
 
 function App() {
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const location = useLocation(); // location 변수를 선언해주세요.
+  const location = useLocation(); // location variable.
 
   const handleMouseMove = (event) => {
     const { clientX, clientY } = event;
@@ -25,7 +25,7 @@ function App() {
   return (
     <div className="App" onMouseMove={handleMouseMove}>
       <Cursor mousePos={mousePos}/>
-      {location.pathname !== '/' && <Header/>} {/* 가이드 페이지가 아닐 때만 Header 컴포넌트를 렌더링합니다. */}
+      {location.pathname !== '/' && <Header/>} {/* Render the Header component only when it is not a guide page. */}
       <TransitionGroup>
         <CSSTransition key={location.key} classNames="fade" timeout={500}>
           <Routes location={location}>

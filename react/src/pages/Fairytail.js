@@ -34,13 +34,13 @@ const Fairytail = () => {
 
     const voiceButton = async ()=>{
         try {
-        // POST 요청을 보내고, 서버로부터 응답을 받아옵니다.
-        const voiceResponse = await axios.post('여기에 서버 주소를 넣어야함', {}, { responseType: 'blob' });// http://101.101.101.101:80
+        //Send a POST request and get a response from the server.
+        const voiceResponse = await axios.post('http://127.0.0.1:5000/get_voice', {}, { responseType: 'blob' });// http://101.101.101.101:80
     
-        // 받아온 데이터를 Blob 객체로 변환합니다.
+        //Converts the received data into blob objects.
         const voiceBlob = new Blob([voiceResponse.data], { type: 'audio/mpeg' });
     
-        // Blob 객체를 Audio 객체에 넘겨줍니다.
+        //Pass the blob object to the Audio object.
         const voice = new Audio(URL.createObjectURL(voiceBlob));
         voiceRef.current = voice;
         } catch (error) {
@@ -53,19 +53,19 @@ const Fairytail = () => {
   return (
     <div className='fairytail_container'>
         <div className='img_container'>
-            {imageUrl ? <img src={fairytaleUrl} alt='동화책 이미지' /> : null}
+            {imageUrl ? <img src={fairytaleUrl} alt="Children's Book Images" /> : null}
         </div>
 
         <div className='story_container'>
             <div className='story'>
                 <div className='draw_img'>
-                    {imageUrl ? <img src={imageUrl} alt='내가 그린 그림' /> : null}
+                    {imageUrl ? <img src={imageUrl} alt='Drawing by me' /> : null}
                 </div>
                 <div className='story_contents'><span>“</span>{storyContents} <span>”</span></div>
-                <button className="voice" onClick={voiceButton}><div>음성 재생하기 <FontAwesomeIcon icon={faMusic} /></div></button>
+                <button className="voice" onClick={voiceButton}><div>Play your voice <FontAwesomeIcon icon={faMusic} /></div></button>
             </div>
             <div className='story_img'>
-                <div><img src={img2} alt="동화책 꾸미는 이미지"/></div>
+                <div><img src={img2} alt="Storybook Decorating Images"/></div>
             </div>
         </div>
     </div>

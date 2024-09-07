@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom'
-import axios from "axios"; // 플라스크에 요청하는 코드의 모듈
+import axios from "axios"; // Modules in code that make requests to flask
 import { useDispatch } from "react-redux";
 
 
-// 이미지 가져오기
+// Get an image
 import drawimg from '../images/drawImg/draw_button.png'
 import eraser from '../images/drawImg/eraser_button.png'
 import clear from '../images/drawImg/clear_button.png'
@@ -21,7 +21,7 @@ const Draw = () => {
   const [painting, setPainting] = useState(false);
   const [tool, setTool] = useState("pen");
 
-   // End: 변수지정----------------------------------------------------------------------------
+   // End: Specifying Variables----------------------------------------------------------------------------
 
 
 
@@ -32,49 +32,49 @@ const Draw = () => {
     canvas.width = window.innerWidth * 0.589;
     canvas.height = window.innerHeight * 0.59;
     const ctx = canvas.getContext("2d");
-    const size = Math.min(canvas.width, canvas.height) / 20; // 포인터 크기를 계산함
-    ctx.lineWidth = size; // 포인터 크기
+    const size = Math.min(canvas.width, canvas.height) / 20; // Calculating pointer size
+    ctx.lineWidth = size; // Pointer size
     ctx.lineJoin = "round";
     ctx.lineCap = "round";
-    ctx.strokeStyle = "#000000"; // 그림 그려질때 색상
+    ctx.strokeStyle = "#000000"; // Colors when drawing
     setGetCtx(ctx);
   }, [canvasRef]);
   
   const clearCanvas = () => {
-    if (!canvasRef.current) return; // canvasRef가 null일 때는 함수를 종료함
+    if (!canvasRef.current) return; // Terminate function when canvasRef is null
     const ctx = canvasRef.current.getContext("2d");
     ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
   };
   // End: clearCanvas----------------------------------------------------------------------------
 
 
-  const handleTouchStart = e => { // 터치라는 이벤트가 발생이 되면 그 터치 좌표를 인식하게하고 인식된 곳에 그림을 그리게 해줌
-    const mouseX = e.touches[0].clientX - canvasRef.current.offsetLeft; // 터치 이벤트 발생 했을때 좌표값X
-    const mouseY = e.touches[0].clientY - canvasRef.current.offsetTop;  // 터치 이벤트 발생 했을때 좌표값Y
-    setPainting(true); // 그림그리기가 시작되었음을 알리는 코드
-    draw(mouseX, mouseY); // 시작이 되었으니 그리라는 코드 draw 함수 호출
+  const handleTouchStart = e => { // When an event called touch occurs, it recognizes the coordinates of the touch and draws a picture in the recognized place.
+    const mouseX = e.touches[0].clientX - canvasRef.current.offsetLeft; // When the touch event occurs, the coordinate value X
+    const mouseY = e.touches[0].clientY - canvasRef.current.offsetTop;  // When the touch event occurs, the coordinate value Y
+    setPainting(true); // The code that tells you that drawing has started
+    draw(mouseX, mouseY); // Now that we've started, call the code draw function to draw
   };
   // End: handleTouchStart----------------------------------------------------------------------------
   
 
-  const handleTouchEnd = e => { // 터치 이벤트가 종료 되면 painting 상태 변수 값을 false로 변경하고, 현재 그리고 있는 그림의 경로를 담기
-    setPainting(false); // 그림그리기가 종료되었음을 알리는 코드
-    getCtx.closePath(); // 메서드는 현재 경로의 마지막 점과 처음 점을 연결하여 경로를 닫습니다. 이 때, 마지막 점과 처음 점 사이에 라인이 그려지지 않습니다. 따라서, 이 메서드는 경로를 닫아서 완성된 도형을 그리는 데 사용
+  const handleTouchEnd = e => { // When the touch event ends, change the value of the painting state variable to false, and set the path to the currently drawing picture.
+    setPainting(false); // Code to indicate that drawing has ended
+    getCtx.closePath(); // The method closes the path by concatenating the first and last points of the current path. At this point, no line is drawn between the last point and the first point. Therefore, this method closes the path and uses it to draw the finished shape.
   };
   // End: handleTouchEnd----------------------------------------------------------------------------
 
 
-  const handleTouchMove = e => {// 터치 이벤트가 종료 되면 painting 상태 변수 값을 false로 변경하고, 현재 그리고 있는 그림의 경로를 담기
-    e.preventDefault(); // 다른 이벤트가 발생하는걸 막기
-    const mouseX = e.touches[0].clientX - canvasRef.current.offsetLeft; // 터치 이벤트 발생 했을때 좌표값X
-    const mouseY = e.touches[0].clientY - canvasRef.current.offsetTop;  // 터치 이벤트 발생 했을때 좌표값Y
-    draw(mouseX, mouseY); // 시작이 되었으니 그리라는 코드 draw 함수 호출
+  const handleTouchMove = e => {// When the touch event ends, change the value of the painting state variable to false, and set the path to the currently drawing picture.
+    e.preventDefault(); // Prevent other events from occurring
+    const mouseX = e.touches[0].clientX - canvasRef.current.offsetLeft; // When the touch event occurs, the coordinate value X
+    const mouseY = e.touches[0].clientY - canvasRef.current.offsetTop;  // When the touch event occurs, the coordinate value Y
+    draw(mouseX, mouseY); // Now that we've started, call the code draw function to draw
   };
   // End: handleTouchMove----------------------------------------------------------------------------
 
 
   
-  const draw = async (x, y, isEnd = false) => { // 그림이 그려지는 코드 tool이 pen이면 그림이 그려지고 eraser면 그림이 지워짐 실제로 그림이 그려지는 함수가 이거임
+  const draw = async (x, y, isEnd = false) => { // If the code tool is pen, the picture is drawn, and if the eraser is eraser, the picture is erased.
     if (!painting) {
       getCtx.beginPath();
       getCtx.moveTo(x, y);
@@ -83,8 +83,8 @@ const Draw = () => {
         getCtx.lineTo(x, y);
         getCtx.stroke();
       } else if (tool === "eraser") {
-        getCtx.globalCompositeOperation = "destination-out";//내가 터치하는 부분이 색이 나오는게 아니고 지워지게
-        getCtx.lineWidth = Math.min(canvasRef.current.width, canvasRef.current.height) / 20; // 지우개 크기
+        getCtx.globalCompositeOperation = "destination-out";//The part I touch doesn't come out with color, but erases it
+        getCtx.lineWidth = Math.min(canvasRef.current.width, canvasRef.current.height) / 20; // Eraser size
         getCtx.lineTo(x, y);
         getCtx.stroke();
         getCtx.globalCompositeOperation = "source-over";
@@ -95,9 +95,9 @@ const Draw = () => {
 
 
   
-  const drawFn = e => { // 마우스 이벤트가 발생했을때 호출되는 함수 마우스와 터치를 다르게 생각하셔야합니당
-    const mouseX = e.nativeEvent.offsetX; //마우스 위치 X
-    const mouseY = e.nativeEvent.offsetY; //마우스 위치 Y
+  const drawFn = e => { // Functions that are called when a mouse event occurs, you have to think differently about mouse and touch.
+    const mouseX = e.nativeEvent.offsetX; //Mouse Position X
+    const mouseY = e.nativeEvent.offsetY; //Mouse Position Y
     if (!painting) {
       getCtx.beginPath();
       getCtx.moveTo(mouseX, mouseY);
@@ -139,8 +139,8 @@ const Draw = () => {
   // End: getDrawArea ----------------------------------------------------------------------------
 
 
-  const handleClick = async () => { //post 버튼을 눌렀을때 발생하는 코드들입니다.
-    // 캔버스와 크기가 같은 새로운 캔버스를 생성합니다. 이미지 인식을 좋게 하기 위해 새로운 캔버스에 담을 코드들
+  const handleClick = async () => { //These are the codes that occur when you press the POST button.
+    // Create a new canvas that is the same size as the canvas. Code to put in the new canvas to improve image recognition
     const canvas = canvasRef.current;
     const [x, y, w, h] = getDrawArea(canvas);
     const canvasResized = document.createElement("canvas");
@@ -148,17 +148,17 @@ const Draw = () => {
     canvasResized.height = h;
     const context = canvasResized.getContext("2d"); 
     
-    // 원본 캔버스에서 그려진 영역을 가져와서 새로운 캔버스에 그립니다.
+    // Take the drawn area from the original canvas and draw it on the new canvas.
     context.drawImage(canvas, x, y, w, h, 0, 0, w, h);
 
-    // 이미지 데이터를 플라스크로 보내는 코드 시작 -------------------
-    // 새로운 캔버스 이미지 데이터를 base64 문자열로 추출합니다.
+    // Start the code that sends the image data to the flask -------------------
+    // Extract the new canvas image data as a base64 string.
     const imageData = canvasResized.toDataURL("image/png", { colorSpaceConversion: "none" });
     const blob = await new Promise(resolve => canvasResized.toBlob(resolve, 'image/png'));
     const imageUrl = URL.createObjectURL(blob);
-    // HTTP POST 요청 데이터를 생성합니다.
+    // Generate HTTP POST request data.
     const data = { "image": imageData };
-    const response = await axios.post('여기에 서버 주소를 넣어야함', data); // http://101.101.101.101:80
+    const response = await axios.post('http://127.0.0.1:5000/post_data', data); // http://101.101.101.101:80
 
 
     dispatch({ type: "CLEARRESULT" });
@@ -178,20 +178,20 @@ const Draw = () => {
   return (
     <div className='draw_container'>
       <ul className='buttons'>
-          <li><button className='draw_button' onClick={() => setTool("pen")}><img src={drawimg} alt='연필 버튼'/></button></li>
-          <li><button className='eraser_button' onClick={() => setTool("eraser")}><img src={eraser} alt='지우개 버튼'/></button></li>
-          <li><button className='clear_button' onClick={clearCanvas}><img src={clear} alt='휴지통 버튼'/></button></li>
-          <li><button className='post_button' onClick={handleClick}><img src={post} alt='그려진 이미지가 뭔지 확인하는 버튼'/></button></li>
+          <li><button className='draw_button' onClick={() => setTool("pen")}><img src={drawimg} alt='Pencil button'/></button></li>
+          <li><button className='eraser_button' onClick={() => setTool("eraser")}><img src={eraser} alt='Eraser button'/></button></li>
+          <li><button className='clear_button' onClick={clearCanvas}><img src={clear} alt='Trashcan button'/></button></li>
+          <li><button className='post_button' onClick={handleClick}><img src={post} alt='Button to check what the drawn image is'/></button></li>
       </ul>
       <div className='canvas_wrap'>
-        <img className='sketch' src={sketchBook} alt='스케치북 이미지'></img>
+        <img className='sketch' src={sketchBook} alt='Sketchbook image'></img>
         <canvas
           className="canvas"
           ref={canvasRef}
           onMouseDown={() => setPainting(true)}
           onMouseUp={() => setPainting(false)}
           onMouseMove={e => drawFn(e)}
-          onMouseLeave={() => setPainting(false)} // onMouseLeave 이벤트 추가
+          onMouseLeave={() => setPainting(false)} // Add an onMouseLeave event
           
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
