@@ -78,7 +78,7 @@ def post_data():
     img_tensor = torch.from_numpy(np.expand_dims(np.expand_dims(img_array, axis=0), axis=0)).to(device)
 
     # Load pre-trained CNN model for image classification
-    model = torch.load("D:\Gitrepo\MIT_PJT-main\CNN_trained\whole_model_quickdraw.pth", map_location=device)
+    model = torch.load("D:\Gitrepo\MIT_PJT-main\CNN_trained\whole_model_MIT328", map_location=device)
     model.eval()
 
     # Perform prediction
@@ -86,48 +86,105 @@ def post_data():
         logits = model(img_tensor)
         pred = torch.argmax(logits, dim=1).item()
         pred_class = CLASSES[pred]
-        pred_class_kr = class_dict.get(pred_class, '알 수 없는 객체')
+        pred_class_kr = class_dict.get(pred_class, 'Unknown Objects')
         keyword_key.clear()
         keyword_key.append(pred_class_kr)
 
     app.logger.info(f'user_id: {user_id}, pred_class: {pred_class}, pred_class_kr: {pred_class_kr}')
-    return jsonify({"prediction": pred_class_kr})
+    return jsonify({"prediction": pred_class})
 
 @app.route('/get_story', methods=['POST'])
 def get_story():
     user_id = get_session_id()
 
-    prompt = "옛날 옛적에 " + keyword_key[0]
-    prompt_ids = tokenizer.encode(prompt)
-    inp = torch.tensor(prompt_ids).unsqueeze(0).to(device)
+    prompt1 = "옛날 옛적에 " + keyword_key[0]
+    prompt_ids1 = tokenizer.encode(prompt1)
+    inp1 = torch.tensor(prompt_ids1).unsqueeze(0).to(device)
 
-    # Story generation logic using KoGPT2
-    generated_story = ""
-    max_iterations = 3
-    for _ in range(max_iterations):
-        preds = model.generate(inp, max_length=100, pad_token_id=tokenizer.pad_token_id,
-                               eos_token_id=tokenizer.eos_token_id, bos_token_id=tokenizer.bos_token_id,
-                               repetition_penalty=2.0, use_cache=True, do_sample=True)
-        generated_text = tokenizer.decode(preds[0], skip_special_tokens=True)
-        generated_story += generated_text + "\n"
+    max_iterations = 100
+    generated_text1 = ""
+    generated_text2 = ""
+    generated_text3 = ""
 
-    # Translate story to English using DeepL
-    translated_text = translator.translate_text(generated_story, target_lang="EN-US")
+    # First prompt generation
+    for i in range(max_iterations):
+        preds = model.generate(inp1,
+                               max_length=20,
+                               pad_token_id=tokenizer.pad_token_id,
+                               eos_token_id=tokenizer.eos_token_id,
+                               bos_token_id=tokenizer.bos_token_id,
+                               repetition_penalty=2.0,
+                               use_cache=True,
+                               do_sample=True)
+        generated_text1 = tokenizer.decode(preds[0], skip_special_tokens=True)
+        if generated_text1[-1] in [".", "!", "?"]:
+            break
+
+    # Second prompt generation
+    prompt_ids2 = tokenizer.encode(generated_text1)
+    inp2 = torch.tensor(prompt_ids2).unsqueeze(0).to(device)
+
+    for i in range(max_iterations):
+        preds = model.generate(inp2,
+                               max_length=40,
+                               pad_token_id=tokenizer.pad_token_id,
+                               eos_token_id=tokenizer.eos_token_id,
+                               bos_token_id=tokenizer.bos_token_id,
+                               repetition_penalty=2.0,
+                               use_cache=True,
+                               do_sample=True)
+        generated_text2 = tokenizer.decode(preds[0], skip_special_tokens=True)
+        if generated_text2[-1] in [".", "!", "?"]:
+            break
+
+    # Third prompt generation
+    prompt_ids3 = tokenizer.encode(generated_text2)
+    inp3 = torch.tensor(prompt_ids3).unsqueeze(0).to(device)
+
+    for i in range(max_iterations):
+        preds = model.generate(inp3,
+                               max_length=70,
+                               pad_token_id=tokenizer.pad_token_id,
+                               eos_token_id=tokenizer.eos_token_id,
+                               bos_token_id=tokenizer.bos_token_id,
+                               repetition_penalty=2.0,
+                               use_cache=True,
+                               do_sample=True)
+        generated_text3 = tokenizer.decode(preds[0], skip_special_tokens=True)
+        if generated_text3[-1] in ["다.", "요.", "죠."]:
+            break
+
+    # Format the generated text
+    final_story = generated_text3.replace(".", ". \n").replace("!", "! \n").replace("?", "? \n")
+
+    # Split into sentences and store the first 10 sentences
+    sentences = final_story.split(". \n")
     story_key.clear()
-    story_key.append(generated_story)
-    story_key_en.clear()
-    story_key_en.append(translated_text.text)
+    for i in range(min(10, len(sentences))):
+        sentence = sentences[i].strip() + "."
+        story_key.append(sentence)
 
-    app.logger.info(f'user_id: {user_id}, story_key: {story_key}, story_key_en: {story_key_en}')
-    return jsonify({"story": story_key[:-1]})
+    if not story_key:
+        return jsonify({"error": "Failed to generate story."}), 500
+
+    # Translate to englishs
+    translated_text = [translator.translate_text(text, target_lang="EN-US").text for text in story_key]
+    story_key_en.clear()
+    story_key_en.append(translated_text)
+
+    app.logger.info(f'user_id: {user_id}, story_key: {story_key}, story_key_en: {story_key_en[0]}')
+    return jsonify({"story": story_key_en[0][:-1]})
+
+
+import os
 
 @app.route('/get_data', methods=['POST'])
 def get_data():
     user_id = get_session_id()
 
-    openai.api_key = ""  # Replace with your actual OpenAI API Key
+    openai.api_key ="" # Replace with your actual OpenAI API Key
     response = openai.Image.create(
-        prompt=f"Draw an incredibly cute and adorable illustration featuring characters with {story_key_en[0]}",
+        prompt=f"Draw an incredibly cute and adorable illustration featuring characters with {story_key_en[0][0]}",
         n=1, size="512x512"
     )
 
@@ -136,12 +193,18 @@ def get_data():
         image_data = requests.get(image_url).content
         image_io = io.BytesIO(image_data)
 
+        # Ensure the directory exists
+        save_dir = './image'
+        if not os.path.exists(save_dir):
+            os.makedirs(save_dir)
+
         # Save the image locally
-        save_path = './image/new_image.png'
+        save_path = os.path.join(save_dir, 'new_image.png')
         with open(save_path, 'wb') as f:
             f.write(image_data)
 
     return send_file(image_io, mimetype='image/png', as_attachment=True, download_name='new_image.png')
+
 
 @app.route('/get_voice', methods=['POST'])
 def get_voice():

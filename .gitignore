@@ -7,3 +7,4 @@
 /koGPT2/*.txt
 /CNN/src/__pycache__
 /CNN_trained/
+/flask/image/
