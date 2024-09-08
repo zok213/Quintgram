@@ -1,5 +1,3 @@
-![0908(2)-1 (1)](https://github.com/user-attachments/assets/aa3bbfbe-2955-4f85-a9e6-04169be4c2f2)![architecture](https://github.com/user-attachments/assets/d712bfd0-5fdf-4dd1-bb1d-a407a768bc77)
-https://github.com/user-attachments/assets/cb22d269-73be-4a43-94b7-9e88ba91cd98
 # :baby: Generate fairy tales for children, Quintgram 📖
 
 <div align="center">
