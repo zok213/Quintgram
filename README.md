@@ -14,7 +14,7 @@ Quintgram educational comic generator is an innovative web service that engages 
 </br>
 
 ## 🗺️ Process Map
-<img src="https://user-images.githubusercontent.com/119478998/228760864-3408c253-e957-499e-9e98-4b3df45aa1d3.png" width="800" height="500" />
+<img src="https://github.com/user-attachments/assets/b39f7f05-3bb8-4b6a-814e-9d1a565896fb" width="800" height="500" />
 
 <br>
 </br>
