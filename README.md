@@ -1,3 +1,5 @@
+![0908(2)-1 (1)](https://github.com/user-attachments/assets/aa3bbfbe-2955-4f85-a9e6-04169be4c2f2)![architecture](https://github.com/user-attachments/assets/d712bfd0-5fdf-4dd1-bb1d-a407a768bc77)
+https://github.com/user-attachments/assets/cb22d269-73be-4a43-94b7-9e88ba91cd98
 # :baby: Generate fairy tales for children, Quintgram 📖
 
 <div align="center">
@@ -28,17 +30,17 @@ Due to file size limitations, the original video has been uploaded to YouTube, w
 </br>
 
 ### 1. Service Guide
-<img src="https://user-images.githubusercontent.com/119478998/228752379-ac0cdc14-d5e0-4014-935a-ef74564def43.gif" width="800" height="400" />
+<img src="https://github.com/user-attachments/assets/600cc919-8550-4140-95fd-19a8f2dfe26e" width="800" height="400" />
 <br>
 </br>
 
 ### 2. Drawing Recognition
-<img src="https://github.com/user-attachments/assets/73d7eece-d3e7-429b-8772-c579a970a4b3" width="800" height="400" />
+<img src="https://github.com/user-attachments/assets/61f9fba3-15be-49a6-86ee-dc360c0cd821" width="800" height="400" />
 <br>
 </br>
 
 ### 3. Fairy Tale Generation
-<img src="https://user-images.githubusercontent.com/119478998/228751099-122cf77c-48fa-4e5d-be71-7bcd4ecd1bf4.gif" width="800" height="400" />
+<img src="https://github.com/user-attachments/assets/275adf8d-4c2b-4e1c-9ad3-8316244f68a2" width="800" height="400" />
 
 <br>
 </br>
@@ -47,7 +49,7 @@ Due to file size limitations, the original video has been uploaded to YouTube, w
 </br>
 
 ## 🛠 Architecture
-<img src="https://user-images.githubusercontent.com/119478998/229721569-cc2b6136-b86f-4b3a-a8c1-b6108efc4395.png" width="900" height="400" />
+<img src="https://github.com/user-attachments/assets/dc24aba9-3302-4b98-b399-727b6bab3614" width="900" height="400" />
 
 
 ## :deciduous_tree: Project Tree 
