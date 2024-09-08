@@ -33,7 +33,7 @@ Due to file size limitations, the original video has been uploaded to YouTube, w
 </br>
 
 ### 2. Drawing Recognition
-<img src="https://user-images.githubusercontent.com/119478998/228748433-6366ac3d-2e8b-4c5e-a6d7-208a5bd8bee5.gif" width="800" height="400" />
+<img src="https://github.com/user-attachments/assets/73d7eece-d3e7-429b-8772-c579a970a4b3" width="800" height="400" />
 <br>
 </br>
 
